@@ -35,7 +35,7 @@
 				"empdata pivot(groupBy(DEPTNO),",
 				"     pivotBy(JOB),",
 				"     {} = count(EMPNO),",
-				"     columnNaming: '$N$V',",
+				"     columnNaming: '$Ndd_$V',",
 				"     lateral: true) ~> pivot1"
 			]
 		}
