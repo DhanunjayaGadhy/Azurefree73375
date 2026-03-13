@@ -95,7 +95,7 @@
 						"     broadcast: 'auto')~> leftjoin",
 						"leftjoin sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     partitionFileNames:['empdept_data'],",
+						"     partitionFileNames:['empdept_data.csv'],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
 						"     partitionBy('hash', 1)) ~> destination"
@@ -282,6 +282,114 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/dataflow_Join')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataflow_Aggregate Trans')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_empdata",
+								"type": "DatasetReference"
+							},
+							"name": "empdata"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "destinationcontainer",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Aggregatempdata"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          EMPNO as string,",
+						"          ENAME as string,",
+						"          JOB as string,",
+						"          MGR as string,",
+						"          HIREDATE as string,",
+						"          SAL as float,",
+						"          COMM as string,",
+						"          DEPTNO as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> empdata",
+						"empdata aggregate(groupBy(DEPTNO),",
+						"     Avg_SAL = avg(SAL),",
+						"          Min_sal = min(SAL),",
+						"          Total_Noof_EMployes = count(EMPNO)) ~> Aggregatempdata",
+						"Aggregatempdata sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['Aggregate_Empdata.csv'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_empdata')]",
+				"[concat(variables('factoryId'), '/datasets/destinationcontainer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Aggregate Transformations')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "dataflow_Aggregate Trans",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"empdata": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/dataflow_Aggregate Trans')]"
 			]
 		}
 	]
