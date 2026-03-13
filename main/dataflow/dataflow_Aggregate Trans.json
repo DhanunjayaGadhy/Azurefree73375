@@ -12,7 +12,15 @@
 					"name": "empdata"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "destinationcontainer",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "Aggregatempdata"
@@ -35,7 +43,13 @@
 				"empdata aggregate(groupBy(DEPTNO),",
 				"     Avg_SAL = avg(SAL),",
 				"          Min_sal = min(SAL),",
-				"          Total_Noof_EMployes = count(EMPNO)) ~> Aggregatempdata"
+				"          Total_Noof_EMployes = count(EMPNO)) ~> Aggregatempdata",
+				"Aggregatempdata sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['Aggregate_Empdata.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}
