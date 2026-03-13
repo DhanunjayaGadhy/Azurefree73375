@@ -62,7 +62,7 @@
 				"     broadcast: 'auto')~> leftjoin",
 				"leftjoin sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     partitionFileNames:['empdept_data'],",
+				"     partitionFileNames:['empdept_data.csv'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     partitionBy('hash', 1)) ~> destination"
