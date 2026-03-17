@@ -34,7 +34,8 @@
 				"     ignoreNoFilesFound: false) ~> empdata",
 				"empdata window(over(DEPTNO),",
 				"     desc(SAL, true),",
-				"     AvgSal = round(avg(SAL), 0)) ~> window1"
+				"     AvgSal = round(avg(SAL), 0),",
+				"          totalemployes = count(EMPNO)) ~> window1"
 			]
 		}
 	}
