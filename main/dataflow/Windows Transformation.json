@@ -1,0 +1,41 @@
+{
+	"name": "Windows Transformation",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_empdata",
+						"type": "DatasetReference"
+					},
+					"name": "empdata"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "window1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          EMPNO as string,",
+				"          ENAME as string,",
+				"          JOB as string,",
+				"          MGR as string,",
+				"          HIREDATE as string,",
+				"          SAL as float,",
+				"          COMM as string,",
+				"          DEPTNO as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> empdata",
+				"empdata window(over(DEPTNO),",
+				"     desc(SAL, true),",
+				"     AvgSal = round(avg(SAL), 0)) ~> window1"
+			]
+		}
+	}
+}
