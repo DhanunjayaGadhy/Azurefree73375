@@ -1,0 +1,93 @@
+{
+	"name": "sample_json",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Sample Json.json",
+				"container": "source"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"type": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				},
+				"image": {
+					"type": "object",
+					"properties": {
+						"url": {
+							"type": "string"
+						},
+						"width": {
+							"type": "integer"
+						},
+						"height": {
+							"type": "integer"
+						}
+					}
+				},
+				"thumbnail": {
+					"type": "object",
+					"properties": {
+						"url": {
+							"type": "string"
+						},
+						"width": {
+							"type": "integer"
+						},
+						"height": {
+							"type": "integer"
+						}
+					}
+				},
+				"batters": {
+					"type": "object",
+					"properties": {
+						"batter": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "string"
+									},
+									"type": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				},
+				"topping": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
