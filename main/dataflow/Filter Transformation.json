@@ -1,0 +1,53 @@
+{
+	"name": "Filter Transformation",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_empdata",
+						"type": "DatasetReference"
+					},
+					"name": "empdata"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "destinationcontainer",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "DeptSalaryfilter"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          EMPNO as string,",
+				"          ENAME as string,",
+				"          JOB as string,",
+				"          MGR as string,",
+				"          HIREDATE as string,",
+				"          SAL as float,",
+				"          COMM as string,",
+				"          DEPTNO as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> empdata",
+				"empdata filter(DEPTNO=='20'&&SAL>1000) ~> DeptSalaryfilter",
+				"DeptSalaryfilter sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['emp_filter.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}
