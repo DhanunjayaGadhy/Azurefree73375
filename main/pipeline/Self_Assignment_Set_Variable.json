@@ -61,6 +61,30 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "Incremeny Y value so X will also increased",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set X is Y",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "X",
+					"value": {
+						"value": "@{add(int(variables('Y')),1)}",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"variables": {
