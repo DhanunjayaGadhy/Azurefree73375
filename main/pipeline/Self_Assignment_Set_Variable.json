@@ -1,0 +1,76 @@
+{
+	"name": "Self_Assignment_Set_Variable",
+	"properties": {
+		"activities": [
+			{
+				"name": "Var X",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "X",
+					"value": "5"
+				}
+			},
+			{
+				"name": "Var Y",
+				"description": "",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Var X",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Y",
+					"value": "999"
+				}
+			},
+			{
+				"name": "Set X is Y",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Var Y",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "X",
+					"value": {
+						"value": "@variables('Y')",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"X": {
+				"type": "String"
+			},
+			"Y": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
