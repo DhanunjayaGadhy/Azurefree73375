@@ -1,5 +1,5 @@
 {
-	"name": "Filterfiles_copy",
+	"name": "Filter_Specific_files_copy",
 	"properties": {
 		"description": "Copying specific file pattern files from Source to Sink",
 		"activities": [
