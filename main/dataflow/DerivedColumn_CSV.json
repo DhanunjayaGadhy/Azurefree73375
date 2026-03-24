@@ -1,0 +1,63 @@
+{
+	"name": "DerivedColumn_CSV",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_rawcsv",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_dynamic_destination",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {\"\"\"Robert} as string,",
+				"          Wilson as string,",
+				"          {40} as string,",
+				"          {Hong Kong\"\"\"} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 derive(FirstName = replace({\"\"\"Robert}, '\"', ''),",
+				"          LastName = Wilson,",
+				"          Age = {40},",
+				"          Country = replace({Hong Kong\"\"\"}, '\"', '')) ~> derivedColumn1",
+				"derivedColumn1 select(mapColumn(",
+				"          FirstName,",
+				"          LastName,",
+				"          Age,",
+				"          Country",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['rawdatamodified.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

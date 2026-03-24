@@ -1,0 +1,40 @@
+{
+	"name": "ds_rawcsv",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "rawfile.csv",
+				"container": "source"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "\"\"\"Robert",
+				"type": "String"
+			},
+			{
+				"name": "Wilson",
+				"type": "String"
+			},
+			{
+				"name": "40",
+				"type": "String"
+			},
+			{
+				"name": "Hong Kong\"\"\"",
+				"type": "String"
+			}
+		]
+	}
+}
