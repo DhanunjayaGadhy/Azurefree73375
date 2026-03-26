@@ -1,0 +1,29 @@
+{
+	"name": "Calling Pipeline - Rest API call",
+	"properties": {
+		"description": "calling another ADF pipeline in to this ADF pipeline",
+		"activities": [
+			{
+				"name": "Calling Personal ADF pipeline",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST",
+					"url": "https://management.azure.com/subscriptions/39562b0f-da49-4797-be19-2ce9fc9caaf4/resourceGroups/Learning_Azure/providers/Microsoft.DataFactory/factories/ADFLearningDJ/pipelines/ForEach loop Iteration/createRun?api-version=2018-06-01",
+					"authentication": {
+						"type": "MSI"
+					}
+				}
+			}
+		],
+		"annotations": []
+	}
+}
