@@ -109,6 +109,84 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "Missing Files count",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Source Count",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Destination Count",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Missedfilescount",
+					"value": {
+						"value": "@{sub(int(variables('Sourcefilecount')),int(variables('Destinationfilecount')))}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Check missed files",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Missing Files count",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(variables('Missedfilescount'),0)",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "Check missed file names",
+							"type": "Filter",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"items": {
+									"value": "@activity('Source Metadata').output.childItems",
+									"type": "Expression"
+								},
+								"condition": {
+									"value": "@not(contains(activity('Destination Metadata').output.childItems,item()))",
+									"type": "Expression"
+								}
+							}
+						}
+					],
+					"ifTrueActivities": [
+						{
+							"name": "Wait1",
+							"type": "Wait",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"waitTimeInSeconds": 2
+							}
+						}
+					]
+				}
 			}
 		],
 		"variables": {
