@@ -1,5 +1,5 @@
 {
-	"name": "Copy_Missedfiles_S_D",
+	"name": "Copy_Missedfiles_S_D1",
 	"properties": {
 		"activities": [
 			{
@@ -111,7 +111,7 @@
 				}
 			},
 			{
-				"name": "Missing Files count",
+				"name": "Missing Files count_SUBstraction",
 				"type": "SetVariable",
 				"dependsOn": [
 					{
@@ -145,7 +145,7 @@
 				"type": "IfCondition",
 				"dependsOn": [
 					{
-						"activity": "Missing Files count",
+						"activity": "Missing Files count_SUBstraction",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -154,7 +154,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@equals(variables('Missedfilescount'),0)",
+						"value": "@equals(int(variables('Missedfilescount')),0)",
 						"type": "Expression"
 					},
 					"ifFalseActivities": [
@@ -171,6 +171,35 @@
 								"condition": {
 									"value": "@not(contains(activity('Destination Metadata').output.childItems,item()))",
 									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Execute Pipeline1",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "Check missed file names",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "copy_Missedfiles_S_D22",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"Missedfilesnames": {
+										"value": "@activity('Check missed file names').output.value",
+										"type": "Expression"
+									}
 								}
 							}
 						}
