@@ -24,6 +24,7 @@
 					],
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
+						"recursive": true,
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
@@ -53,14 +54,74 @@
 					],
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
+						"recursive": true,
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
 						"type": "DelimitedTextReadSettings"
 					}
 				}
+			},
+			{
+				"name": "Source Count",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Source Metadata",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Sourcefilecount",
+					"value": {
+						"value": "@{length(activity('Source Metadata').output.childItems)}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Destination Count",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Destination Metadata",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Destinationfilecount",
+					"value": {
+						"value": "@{length(activity('Destination Metadata').output.childItems)}",
+						"type": "Expression"
+					}
+				}
 			}
 		],
+		"variables": {
+			"Sourcefilecount": {
+				"type": "String"
+			},
+			"Destinationfilecount": {
+				"type": "String"
+			},
+			"Missedfilescount": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
