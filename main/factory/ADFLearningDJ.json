@@ -1,0 +1,15 @@
+{
+	"name": "ADFLearningDJ",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "14bedb6f-ab04-4303-9a09-e551cc94f04a",
+		"tenantId": "92d0b288-eeee-4305-8b34-f49ff78e5cb0"
+	}
+}
